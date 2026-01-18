@@ -1,0 +1,1 @@
+C:\Users\dodoc\OneDrive\Desktop\Facultate\BPDA\Project\document-verification\target\debug\document-verification-meta.exe: C:\Users\dodoc\OneDrive\Desktop\Facultate\BPDA\Project\document-verification\meta\src\main.rs C:\Users\dodoc\OneDrive\Desktop\Facultate\BPDA\Project\document-verification\src\document_verification.rs

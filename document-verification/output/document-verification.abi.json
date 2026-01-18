@@ -1,0 +1,168 @@
+{
+    "buildInfo": {
+        "contractCrate": {
+            "name": "document-verification",
+            "version": "0.0.0"
+        },
+        "framework": {
+            "name": "multiversx-sc",
+            "version": "0.63.3"
+        }
+    },
+    "docs": [
+        "Smart Contract pentru verificarea decentralizată a documentelor",
+        "Permite înregistrarea, verificarea și revocarea hash-urilor de documente"
+    ],
+    "name": "DocumentVerification",
+    "constructor": {
+        "docs": [
+            "Inițializează contractul"
+        ],
+        "inputs": [],
+        "outputs": []
+    },
+    "upgradeConstructor": {
+        "docs": [
+            "Upgrade contract"
+        ],
+        "inputs": [],
+        "outputs": []
+    },
+    "endpoints": [
+        {
+            "docs": [
+                "Înregistrează un hash de document pe blockchain",
+                "@param document_hash - Hash-ul SHA-256 al documentului (în format hex)"
+            ],
+            "name": "registerDocument",
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "document_hash",
+                    "type": "bytes"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "docs": [
+                "Verifică dacă un document este înregistrat și returnează informațiile",
+                "@param document_hash - Hash-ul documentului de verificat"
+            ],
+            "name": "verifyDocument",
+            "mutability": "readonly",
+            "inputs": [
+                {
+                    "name": "document_hash",
+                    "type": "bytes"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "bool"
+                },
+                {
+                    "type": "Address"
+                },
+                {
+                    "type": "u64"
+                },
+                {
+                    "type": "bool"
+                }
+            ]
+        },
+        {
+            "docs": [
+                "Revocă un document (doar proprietarul poate face asta)",
+                "@param document_hash - Hash-ul documentului de revocat"
+            ],
+            "name": "revokeDocument",
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "document_hash",
+                    "type": "bytes"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "docs": [
+                "Returnează toate documentele înregistrate de un utilizator"
+            ],
+            "name": "getUserDocuments",
+            "mutability": "readonly",
+            "inputs": [
+                {
+                    "name": "user",
+                    "type": "Address"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "variadic<bytes>",
+                    "multi_result": true
+                }
+            ]
+        },
+        {
+            "docs": [
+                "Returnează numărul total de documente înregistrate"
+            ],
+            "name": "getTotalDocuments",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "u64"
+                }
+            ]
+        }
+    ],
+    "events": [
+        {
+            "docs": [
+                "Eveniment emis când un document este înregistrat"
+            ],
+            "identifier": "documentRegistered",
+            "inputs": [
+                {
+                    "name": "owner",
+                    "type": "Address",
+                    "indexed": true
+                },
+                {
+                    "name": "document_hash",
+                    "type": "bytes",
+                    "indexed": true
+                },
+                {
+                    "name": "timestamp",
+                    "type": "u64"
+                }
+            ]
+        },
+        {
+            "docs": [
+                "Eveniment emis când un document este revocat"
+            ],
+            "identifier": "documentRevoked",
+            "inputs": [
+                {
+                    "name": "owner",
+                    "type": "Address",
+                    "indexed": true
+                },
+                {
+                    "name": "document_hash",
+                    "type": "bytes",
+                    "indexed": true
+                }
+            ]
+        }
+    ],
+    "esdtAttributes": [],
+    "hasCallback": false,
+    "types": {}
+}

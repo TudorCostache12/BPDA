@@ -1,0 +1,1 @@
+\\?\C:\Users\dodoc\OneDrive\Desktop\Facultate\BPDA\Project\document-verification\target\wasm32v1-none\release\document_verification_wasm.wasm: C:\Users\dodoc\OneDrive\Desktop\Facultate\BPDA\Project\document-verification\src\document_verification.rs C:\Users\dodoc\OneDrive\Desktop\Facultate\BPDA\Project\document-verification\wasm\src\lib.rs
