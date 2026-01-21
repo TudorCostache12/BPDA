@@ -16,12 +16,12 @@ export function WalletConnect({ isConnected, address, onConnect, onDisconnect }:
             🟢 {formatAddress(address)}
           </span>
           <button className="btn disconnect" onClick={onDisconnect}>
-            Deconectare
+            Disconnect
           </button>
         </div>
       ) : (
         <button className="btn connect" onClick={onConnect}>
-          🔗 Conectează Portofel
+          🔗 Connect Wallet
         </button>
       )}
     </div>

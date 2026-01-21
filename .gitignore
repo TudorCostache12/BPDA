@@ -2,3 +2,5 @@ node_modules/
 dist/
 *.pem
 erd1*.json
+*md
+*.pdf

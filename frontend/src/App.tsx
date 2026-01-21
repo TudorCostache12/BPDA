@@ -23,14 +23,14 @@ function App() {
     fetchTotal();
   }, []);
 
-  // Handler pentru conectarea portofelului
+  // Handler for wallet connection
   const handleConnect = useCallback(async () => {
-    // Redirect la Web Wallet pentru autentificare
+    // Redirect to Web Wallet for authentication
     const callbackUrl = encodeURIComponent(window.location.origin + "/auth");
     window.location.href = `https://devnet-wallet.multiversx.com/hook/login?callbackUrl=${callbackUrl}`;
   }, []);
 
-  // Verifică dacă utilizatorul s-a autentificat sau a finalizat o tranzacție
+  // Check if user has authenticated or completed a transaction
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const addressParam = urlParams.get("address");
@@ -38,7 +38,7 @@ function App() {
     const txHashParam = urlParams.get("txHash");
     const actionParam = urlParams.get("action");
     
-    // Gestionare login
+    // Handle login
     if (addressParam) {
       setAddress(addressParam);
       setIsConnected(true);
@@ -52,39 +52,39 @@ function App() {
       }
     }
 
-    // Gestionare status tranzacție
+    // Handle transaction status
     if (statusParam && txHashParam) {
       if (statusParam === "success") {
-        alert(`Tranzacție trimisă cu succes!\nHash: ${txHashParam}\nAșteaptă câteva secunde pentru confirmare.`);
-        // Dacă a fost o înregistrare, reîmprospătează totalul
+        alert(`Transaction sent successfully!\nHash: ${txHashParam}\nPlease wait a few seconds for confirmation.`);
+        // If it was a registration, refresh the total
         if (actionParam === "register") {
           setTimeout(() => {
              getTotalDocuments().then(setTotalDocs);
-          }, 6000); // Așteaptă 6 secunde pentru procesare pe blockchain
+          }, 6000); // Wait 6 seconds for blockchain processing
         }
       } else if (statusParam === "fail" || statusParam === "cancelled") {
-        alert(`Tranzacție eșuată sau anulată.\nStatus: ${statusParam}`);
+        alert(`Transaction failed or cancelled.\nStatus: ${statusParam}`);
       }
-      // Curăță URL-ul
+      // Clean up URL
       window.history.replaceState({}, document.title, window.location.pathname);
     }
   }, []);
 
-  // Handler pentru deconectare
+  // Handler for disconnect
   const handleDisconnect = useCallback(() => {
     setIsConnected(false);
     setAddress(null);
     localStorage.removeItem("walletAddress");
   }, []);
 
-  // Handler pentru înregistrarea unui document
+  // Handler for document registration
   const handleRegister = useCallback(async (hash: string) => {
-    if (!address) throw new Error("Portofel neconectat");
+    if (!address) throw new Error("Wallet not connected");
     
-    // Construiește datele tranzacției
+    // Build transaction data
     const data = buildRegisterDocumentData(hash);
     
-    // Redirect la Web Wallet pentru semnare
+    // Redirect to Web Wallet for signing
     const txData = {
       receiver: config.contractAddress,
       value: "0",
@@ -98,7 +98,7 @@ function App() {
     window.location.href = txUrl;
   }, [address]);
 
-  // Handler pentru verificarea unui document
+  // Handler for document verification
   const handleVerify = useCallback(async (hash: string) => {
     return await verifyDocument(hash);
   }, []);
@@ -118,11 +118,11 @@ function App() {
         <div className="stats">
           <div className="stat-item">
             <span className="stat-value">{totalDocs}</span>
-            <span className="stat-label">Documente Înregistrate</span>
+            <span className="stat-label">Registered Documents</span>
           </div>
           <div className="stat-item">
             <span className="stat-value">Devnet</span>
-            <span className="stat-label">Rețea</span>
+            <span className="stat-label">Network</span>
           </div>
         </div>
 
@@ -131,13 +131,13 @@ function App() {
             className={`tab ${activeTab === "register" ? "active" : ""}`}
             onClick={() => setActiveTab("register")}
           >
-            📄 Înregistrare
+            📄 Register
           </button>
           <button
             className={`tab ${activeTab === "verify" ? "active" : ""}`}
             onClick={() => setActiveTab("verify")}
           >
-            🔍 Verificare
+            🔍 Verify
           </button>
         </div>
 

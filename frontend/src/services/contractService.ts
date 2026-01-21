@@ -1,6 +1,6 @@
 import { config } from "../config";
 
-// Interfață pentru rezultatul verificării
+// Interface for verification result
 export interface VerificationResult {
   exists: boolean;
   owner: string;
@@ -9,7 +9,7 @@ export interface VerificationResult {
 }
 
 /**
- * Convertește hex în număr
+ * Converts hex to number
  */
 function hexToNumber(hex: string): number {
   if (!hex || hex === "") return 0;
@@ -17,8 +17,8 @@ function hexToNumber(hex: string): number {
 }
 
 /**
- * Convertește string hex în bytes și apoi în base64
- * Necesar pentru a trimite hash-ul corect la API
+ * Converts hex string to bytes and then to base64
+ * Required to send the hash correctly to the API
  */
 function hexToBase64(hex: string): string {
   const bytes = new Uint8Array(hex.match(/.{1,2}/g)!.map(byte => parseInt(byte, 16)));
@@ -28,7 +28,7 @@ function hexToBase64(hex: string): string {
 }
 
 /**
- * Verifică un document pe blockchain folosind API-ul MultiversX
+ * Verifies a document on blockchain using the MultiversX API
  */
 export async function verifyDocument(hash: string): Promise<VerificationResult> {
   try {
@@ -62,7 +62,7 @@ export async function verifyDocument(hash: string): Promise<VerificationResult> 
     const result = await response.json();
     console.log("Query result:", result);
     
-    // Parse rezultatul - API-ul returnează direct returnData
+    // Parse result - API returns returnData directly
     const returnData = result.returnData || (result.data && result.data.returnData);
     
     if (returnData && returnData.length >= 4) {
@@ -113,7 +113,7 @@ export async function verifyDocument(hash: string): Promise<VerificationResult> 
 }
 
 /**
- * Obține numărul total de documente înregistrate
+ * Gets the total number of registered documents
  */
 export async function getTotalDocuments(): Promise<number> {
   try {
@@ -144,7 +144,7 @@ export async function getTotalDocuments(): Promise<number> {
     const result = await response.json();
     console.log("Total documents result:", result);
     
-    // Parse rezultatul - API-ul returnează direct returnData
+    // Parse result - API returns returnData directly
     const returnData = result.returnData || (result.data && result.data.returnData);
     
     if (returnData && returnData.length > 0 && returnData[0]) {
@@ -152,7 +152,7 @@ export async function getTotalDocuments(): Promise<number> {
       console.log("Raw total:", raw, "length:", raw.length);
       
       if (raw.length > 0) {
-        // Convertește bytes în număr
+        // Convert bytes to number
         let num = 0;
         for (let i = 0; i < raw.length; i++) {
           num = num * 256 + raw.charCodeAt(i);
@@ -170,14 +170,14 @@ export async function getTotalDocuments(): Promise<number> {
 }
 
 /**
- * Construiește datele tranzacției pentru înregistrarea unui document
+ * Builds transaction data for document registration
  */
 export function buildRegisterDocumentData(hash: string): string {
   return `${config.endpoints.registerDocument}@${hash}`;
 }
 
 /**
- * Construiește datele tranzacției pentru revocarea unui document
+ * Builds transaction data for document revocation
  */
 export function buildRevokeDocumentData(hash: string): string {
   return `${config.endpoints.revokeDocument}@${hash}`;

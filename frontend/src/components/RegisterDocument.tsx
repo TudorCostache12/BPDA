@@ -26,7 +26,7 @@ export function RegisterDocument({ isConnected, onRegister }: RegisterDocumentPr
       const calculatedHash = await calculateFileHash(selectedFile);
       setHash(calculatedHash);
     } catch (error) {
-      setMessage({ type: "error", text: "Eroare la calcularea hash-ului." });
+      setMessage({ type: "error", text: "Error calculating hash." });
       console.error(error);
     } finally {
       setIsCalculating(false);
@@ -41,9 +41,9 @@ export function RegisterDocument({ isConnected, onRegister }: RegisterDocumentPr
 
     try {
       await onRegister(hash);
-      setMessage({ type: "success", text: "Document înregistrat cu succes pe blockchain!" });
+      setMessage({ type: "success", text: "Document successfully registered on blockchain!" });
     } catch (error) {
-      setMessage({ type: "error", text: `Eroare: ${error instanceof Error ? error.message : "Necunoscută"}` });
+      setMessage({ type: "error", text: `Error: ${error instanceof Error ? error.message : "Unknown"}` });
     } finally {
       setIsRegistering(false);
     }
@@ -51,10 +51,10 @@ export function RegisterDocument({ isConnected, onRegister }: RegisterDocumentPr
 
   return (
     <div className="card">
-      <h2>📄 Înregistrare Document</h2>
+      <h2>📄 Register Document</h2>
       <p className="description">
-        Selectează un fișier pentru a-i calcula amprenta digitală (hash SHA-256) și a o înregistra pe blockchain.
-        <strong> Fișierul nu părăsește calculatorul tău.</strong>
+        Select a file to calculate its digital fingerprint (SHA-256 hash) and register it on the blockchain.
+        <strong> The file never leaves your computer.</strong>
       </p>
 
       <div className="file-upload">
@@ -65,11 +65,11 @@ export function RegisterDocument({ isConnected, onRegister }: RegisterDocumentPr
           disabled={isCalculating || isRegistering}
         />
         <label htmlFor="file-input" className="file-label">
-          {file ? file.name : "Selectează fișier"}
+          {file ? file.name : "Select file"}
         </label>
       </div>
 
-      {isCalculating && <p className="loading">Se calculează hash-ul...</p>}
+      {isCalculating && <p className="loading">Calculating hash...</p>}
 
       {hash && (
         <div className="hash-result">
@@ -92,11 +92,11 @@ export function RegisterDocument({ isConnected, onRegister }: RegisterDocumentPr
         onClick={handleRegister}
         disabled={!hash || !isConnected || isRegistering}
       >
-        {isRegistering ? "Se înregistrează..." : "Înregistrează pe Blockchain"}
+        {isRegistering ? "Registering..." : "Register on Blockchain"}
       </button>
 
       {!isConnected && (
-        <p className="warning">Conectează-te cu portofelul pentru a înregistra documente.</p>
+        <p className="warning">Connect your wallet to register documents.</p>
       )}
     </div>
   );

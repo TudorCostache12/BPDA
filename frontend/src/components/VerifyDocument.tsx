@@ -35,7 +35,7 @@ export function VerifyDocument({ onVerify }: VerifyDocumentProps) {
       const hash = await calculateFileHash(selectedFile);
       setCurrentHash(hash);
     } catch (err) {
-      setError("Eroare la calcularea hash-ului.");
+      setError("Error calculating hash.");
       console.error(err);
     } finally {
       setIsCalculating(false);
@@ -46,12 +46,12 @@ export function VerifyDocument({ onVerify }: VerifyDocumentProps) {
     const hashToVerify = verifyMode === "file" ? currentHash : hashInput.trim().toLowerCase();
 
     if (!hashToVerify) {
-      setError("Selectează un fișier sau introdu un hash.");
+      setError("Select a file or enter a hash.");
       return;
     }
 
     if (!isValidSha256Hash(hashToVerify)) {
-      setError("Hash invalid. Trebuie să fie un hash SHA-256 (64 caractere hex).");
+      setError("Invalid hash. Must be a SHA-256 hash (64 hex characters).");
       return;
     }
 
@@ -63,7 +63,7 @@ export function VerifyDocument({ onVerify }: VerifyDocumentProps) {
       const verificationResult = await onVerify(hashToVerify);
       setResult(verificationResult);
     } catch (err) {
-      setError(`Eroare la verificare: ${err instanceof Error ? err.message : "Necunoscută"}`);
+      setError(`Verification error: ${err instanceof Error ? err.message : "Unknown"}`);
     } finally {
       setIsVerifying(false);
     }
@@ -71,9 +71,9 @@ export function VerifyDocument({ onVerify }: VerifyDocumentProps) {
 
   return (
     <div className="card">
-      <h2>🔍 Verificare Document</h2>
+      <h2>🔍 Verify Document</h2>
       <p className="description">
-        Verifică dacă un document a fost înregistrat pe blockchain.
+        Check if a document has been registered on the blockchain.
       </p>
 
       <div className="mode-toggle">
@@ -81,13 +81,13 @@ export function VerifyDocument({ onVerify }: VerifyDocumentProps) {
           className={`toggle-btn ${verifyMode === "file" ? "active" : ""}`}
           onClick={() => { setVerifyMode("file"); setResult(null); setError(null); }}
         >
-          Verifică cu Fișier
+          Verify with File
         </button>
         <button
           className={`toggle-btn ${verifyMode === "hash" ? "active" : ""}`}
           onClick={() => { setVerifyMode("hash"); setResult(null); setError(null); }}
         >
-          Verifică cu Hash
+          Verify with Hash
         </button>
       </div>
 
@@ -100,7 +100,7 @@ export function VerifyDocument({ onVerify }: VerifyDocumentProps) {
             disabled={isCalculating || isVerifying}
           />
           <label htmlFor="verify-file-input" className="file-label">
-            {file ? file.name : "Selectează fișier"}
+            {file ? file.name : "Select file"}
           </label>
           {currentHash && (
             <div className="hash-preview">
@@ -112,7 +112,7 @@ export function VerifyDocument({ onVerify }: VerifyDocumentProps) {
         <div className="hash-input">
           <input
             type="text"
-            placeholder="Introdu hash-ul SHA-256 (64 caractere)"
+            placeholder="Enter SHA-256 hash (64 characters)"
             value={hashInput}
             onChange={(e) => setHashInput(e.target.value)}
             maxLength={64}
@@ -120,7 +120,7 @@ export function VerifyDocument({ onVerify }: VerifyDocumentProps) {
         </div>
       )}
 
-      {isCalculating && <p className="loading">Se calculează hash-ul...</p>}
+      {isCalculating && <p className="loading">Calculating hash...</p>}
 
       {error && <div className="message error">{error}</div>}
 
@@ -129,7 +129,7 @@ export function VerifyDocument({ onVerify }: VerifyDocumentProps) {
         onClick={handleVerify}
         disabled={isVerifying || isCalculating || (verifyMode === "file" ? !currentHash : !hashInput)}
       >
-        {isVerifying ? "Se verifică..." : "Verifică"}
+        {isVerifying ? "Verifying..." : "Verify"}
       </button>
 
       {result && (
@@ -138,29 +138,29 @@ export function VerifyDocument({ onVerify }: VerifyDocumentProps) {
             result.isRevoked ? (
               <>
                 <div className="result-icon">⚠️</div>
-                <h3>Document Revocat</h3>
-                <p>Acest document a fost înregistrat dar ulterior revocat de proprietar.</p>
+                <h3>Document Revoked</h3>
+                <p>This document was registered but later revoked by the owner.</p>
                 <div className="result-details">
-                  <p><strong>Proprietar:</strong> <span title={result.owner}>{formatAddress(result.owner)}</span></p>
-                  <p><strong>Data înregistrării:</strong> {formatTimestamp(result.timestamp)}</p>
+                  <p><strong>Owner:</strong> <span title={result.owner}>{formatAddress(result.owner)}</span></p>
+                  <p><strong>Registration Date:</strong> {formatTimestamp(result.timestamp)}</p>
                 </div>
               </>
             ) : (
               <>
                 <div className="result-icon">✅</div>
-                <h3>Document Valid</h3>
-                <p>Acest document este înregistrat pe blockchain.</p>
+                <h3>Valid Document</h3>
+                <p>This document is registered on the blockchain.</p>
                 <div className="result-details">
-                  <p><strong>Proprietar:</strong> <span title={result.owner}>{formatAddress(result.owner)}</span></p>
-                  <p><strong>Data înregistrării:</strong> {formatTimestamp(result.timestamp)}</p>
+                  <p><strong>Owner:</strong> <span title={result.owner}>{formatAddress(result.owner)}</span></p>
+                  <p><strong>Registration Date:</strong> {formatTimestamp(result.timestamp)}</p>
                 </div>
               </>
             )
           ) : (
             <>
               <div className="result-icon">❌</div>
-              <h3>Document Neînregistrat</h3>
-              <p>Acest document nu a fost găsit pe blockchain.</p>
+              <h3>Document Not Registered</h3>
+              <p>This document was not found on the blockchain.</p>
             </>
           )}
         </div>

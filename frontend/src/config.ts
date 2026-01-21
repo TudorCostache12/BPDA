@@ -1,19 +1,19 @@
-// Configurație pentru aplicația Document Verification
+// Configuration for the Document Verification application
 export const config = {
-  // Adresa contractului pe Devnet - DEPLOYED!
+  // Contract address on Devnet - DEPLOYED!
   contractAddress: "erd1qqqqqqqqqqqqqpgqctlge8fuxrl0ptzg2vj5gwy4h645lmr68pnsyc57wa",
   
-  // API și Explorer URLs
+  // API and Explorer URLs
   apiUrl: "https://devnet-api.multiversx.com",
   explorerUrl: "https://devnet-explorer.multiversx.com",
   
-  // Chain ID pentru Devnet
+  // Chain ID for Devnet
   chainId: "D",
   
-  // Wallet Connect Project ID (opțional, pentru xPortal)
+  // Wallet Connect Project ID (optional, for xPortal)
   walletConnectV2ProjectId: "",
   
-  // Endpoint-uri contract
+  // Contract endpoints
   endpoints: {
     registerDocument: "registerDocument",
     verifyDocument: "verifyDocument",
