@@ -1,5 +1,5 @@
-# Script pentru deploy pe MultiversX Devnet
-# Rulare: .\deploy.ps1 -WalletPem "path\to\wallet.pem"
+# Deploy script for MultiversX Devnet
+# Usage: .\deploy.ps1 -WalletPem "path\to\wallet.pem"
 
 param(
     [Parameter(Mandatory=$true)]
@@ -8,32 +8,24 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-# Configurare
+# Configuration
 $ContractWasm = "..\document-verification\output\document-verification.wasm"
 $Proxy = "https://devnet-gateway.multiversx.com"
 $ChainId = "D"
 $GasLimit = 100000000
 
-Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "  Deploy Document Verification Contract" -ForegroundColor Cyan
-Write-Host "========================================" -ForegroundColor Cyan
-
-# Verifică dacă contractul este compilat
 if (-not (Test-Path $ContractWasm)) {
-    Write-Host "Eroare: Contractul nu este compilat!" -ForegroundColor Red
-    Write-Host "Rulează mai întâi: cd document-verification; sc-meta all build" -ForegroundColor Yellow
+    Write-Host "Error: Contract not compiled. Run: cd document-verification; sc-meta all build"
     exit 1
 }
 
-# Verifică dacă fișierul PEM există
 if (-not (Test-Path $WalletPem)) {
-    Write-Host "Eroare: Fișierul PEM nu există: $WalletPem" -ForegroundColor Red
+    Write-Host "Error: PEM file not found: $WalletPem"
     exit 1
 }
 
-Write-Host "`nDeploying contract..." -ForegroundColor Green
+Write-Host "Deploying contract..."
 
-# Deploy contract
 $deployResult = mxpy contract deploy `
     --bytecode $ContractWasm `
     --pem $WalletPem `
@@ -44,16 +36,13 @@ $deployResult = mxpy contract deploy `
 
 Write-Host $deployResult
 
-# Extrage adresa contractului
+# Extract contract address from output
 $contractAddress = $deployResult | Select-String -Pattern "erd1[a-z0-9]+" | ForEach-Object { $_.Matches[0].Value } | Select-Object -Last 1
 
 if ($contractAddress) {
-    Write-Host "`n========================================" -ForegroundColor Green
-    Write-Host "  Contract deployed successfully!" -ForegroundColor Green
-    Write-Host "========================================" -ForegroundColor Green
-    Write-Host "Contract Address: $contractAddress" -ForegroundColor Yellow
-    Write-Host "`nActualizează config.ts cu această adresă!" -ForegroundColor Cyan
-    Write-Host "Explorer: https://devnet-explorer.multiversx.com/accounts/$contractAddress" -ForegroundColor Blue
+    Write-Host "Contract Address: $contractAddress"
+    Write-Host "Update config.ts with this address."
+    Write-Host "Explorer: https://devnet-explorer.multiversx.com/accounts/$contractAddress"
 } else {
-    Write-Host "Verifică output-ul pentru detalii despre deploy." -ForegroundColor Yellow
+    Write-Host "Check output for deploy details."
 }
